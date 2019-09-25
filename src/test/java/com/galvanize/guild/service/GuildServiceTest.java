@@ -48,16 +48,27 @@ public class GuildServiceTest {
     }
 
     @Test
+    public void updateGuild() {
+        Guild guild = new Guild("ChangeMe", 7l, "RP");
+        guildRepository.save(guild);
+
+        guild.setGuildName("NewName");
+        Guild changeGuild = guildService.updateGuild(guild);
+
+        assertEquals("NewName", changeGuild.getGuildName());
+    }
+
+    @Test
     public void getAllGuilds() {
         List<Guild> guilds = new ArrayList<>();
-        for(int i = 0; i <20; i++){
-            guilds.add(new Guild("Potent"+i, (long) 12, "PVP"+2));
+        for (int i = 0; i < 20; i++) {
+            guilds.add(new Guild("Potent" + i, (long) 12, "PVP" + 2));
         }
         guildRepository.saveAll(guilds);
 
         List<Guild> sGuild = guildService.getAllGuilds();
 
-        for (Guild guild: sGuild) {
+        for (Guild guild : sGuild) {
             assertNotNull(guild.getGuildId());
         }
     }
@@ -67,8 +78,23 @@ public class GuildServiceTest {
         Guild guild = new Guild("Fierce", (long) 67, "RP");
         guildRepository.save(guild);
 
-        Guild newGuild = guildService.getGuildById(guild.getGuildId());
+        assertNotNull(guildService.getGuildById(guild.getGuildId()));
+    }
 
-        assertNotNull(guild.getGuildId());
+    @Test
+    public void getGuildByType() {
+        List<Guild> guilds = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            guilds.add(new Guild("TEST" + i, (long) 12, "PVP"));
+            guilds.add(new Guild("TEST" + i, (long) 12, "RP"));
+        }
+        guildRepository.saveAll(guilds);
+
+        List<Guild> pvpguild = guildService.getGuildByType("PVP");
+        assertNotNull(guilds);
+        assertTrue(pvpguild.size() > 0);
+        for (Guild guild : pvpguild) {
+            assertEquals("PVP", guild.getGuildType());
+        }
     }
 }

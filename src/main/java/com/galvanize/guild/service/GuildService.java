@@ -25,6 +25,10 @@ public class GuildService {
         return guildRepository.findById(guildId).get();
     }
 
+    public List<Guild> getGuildByType(String param){
+        return guildRepository.findByGuildType(param);
+    }
+
     public boolean deleteGuild(Long guildId){
         Optional<Guild> g = guildRepository.findById(guildId);
         if (g.isPresent()){
@@ -32,6 +36,15 @@ public class GuildService {
             return true;
         }else{
             return false;
+        }
+    }
+
+    public Guild updateGuild(Guild guild) {
+       Optional<Guild> t = guildRepository.findById(guild.getGuildId());
+        if (t.isPresent()){
+           return guildRepository.save(guild);
+        }else{
+            return null; // Exception
         }
     }
 }

@@ -28,4 +28,9 @@ public class GuildController {
     public Guild getGuildById(@PathVariable Long id){
         return guildService.getGuildById(id);
     }
+
+    @GetMapping("/type/{guildType}")
+    public List<Guild> getGuildByType(@PathVariable String guildType){
+        return guildService.getGuildByType(guildType);
+    }
 }
